@@ -76,5 +76,6 @@ char	*get_next_line(int fd)
 		}
 		nl_pos = ft_strchr(left_overs[fd], '\n');
 	}
+	free(buf);
 	return (extract_line(&left_overs[fd], nl_pos));
 }
