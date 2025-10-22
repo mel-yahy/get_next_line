@@ -54,18 +54,18 @@ static int	read_into_buf(int fd, char *buf)
 char	*get_next_line(int fd)
 {
 	static char	*left_over = NULL;
-	char		buf[BUFFER_SIZE + 1];
-	char		*line;
+	char		*buf;
 	char		*nl_pos;
 	char		*tmp;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
+	buf = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (buf == NULL)
+		return (NULL);
 	nl_pos = ft_strchr(left_over, '\n');
-	while (nl_pos == NULL)
+	while (nl_pos == NULL && read_into_buf(fd, buf) != -1)
 	{
-		if (read_into_buf(fd, buf) == -1)
-			break ;
 		if (left_over == NULL)
 			left_over = ft_strdup(buf);
 		else
@@ -76,6 +76,5 @@ char	*get_next_line(int fd)
 		}
 		nl_pos = ft_strchr(left_over, '\n');
 	}
-	line = extract_line(&left_over, nl_pos);
-	return (line);
+	return (extract_line(&left_over, nl_pos));
 }
