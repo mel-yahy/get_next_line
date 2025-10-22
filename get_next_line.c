@@ -59,6 +59,8 @@ char	*get_next_line(int fd)
 	char		*nl_pos;
 	char		*tmp;
 
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
 	nl_pos = ft_strchr(left_over, '\n');
 	while (nl_pos == NULL)
 	{
