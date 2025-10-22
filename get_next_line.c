@@ -40,13 +40,17 @@ static char	*extract_line(char **left_over, char *nl_pos)
 	return (line);
 }
 
-static int	read_into_buf(int fd, char *buf)
+static int	read_into_buf(int fd, char *buf, char **left_over)
 {
 	int	bytes;
 
 	bytes = read(fd, buf, BUFFER_SIZE);
-	if (bytes <= 0)
+	if (bytes < 0)
+	{
+		free(*left_over);
+		*left_over = NULL;
 		return (-1);
+	}
 	buf[bytes] = '\0';
 	return (bytes);
 }
@@ -64,7 +68,7 @@ char	*get_next_line(int fd)
 	if (buf == NULL)
 		return (NULL);
 	nl_pos = ft_strchr(left_over, '\n');
-	while (nl_pos == NULL && read_into_buf(fd, buf) != -1)
+	while (nl_pos == NULL && read_into_buf(fd, buf, &left_over) > 0)
 	{
 		if (left_over == NULL)
 			left_over = ft_strdup(buf);
