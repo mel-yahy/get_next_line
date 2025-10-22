@@ -16,18 +16,19 @@ static char	*extract_line(char **left_over, char *nl_pos)
 {
 	char	*line;
 	char	*tmp;
-	size_t	len;
 
 	if (*left_over == NULL || (*left_over)[0] == '\0')
 		return (NULL);
 	if (nl_pos != NULL)
 	{
-		len = nl_pos - *left_over + 1;
-		line = ft_substr(*left_over, 0, len);
+		line = ft_substr(*left_over, 0, nl_pos - *left_over + 1);
 		tmp = *left_over;
 		*left_over = ft_strdup(nl_pos + 1);
 		if ((*left_over)[0] == '\0')
+		{
 			free(*left_over);
+			*left_over = NULL;
+		}
 		free(tmp);
 	}
 	else
